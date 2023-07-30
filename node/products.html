@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Products Page</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="wrapper">
+	<header>
+		<nav>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="products.html">Products</a></li>
+				<li><a href="contact.html">Contact</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<h1>Our Products</h1>
+<button onclick="getProducts();">Show me the products </button>
+<button onclick="calculateCost();">What's the cost? </button>
+<br><br>
+<div id="products">
+	<table  border="1">
+  <tr>
+    <th width=200px>Product Name   </th>
+    <th width=50px>Price</th>
+    <th width=170px>Quantity</th>
+  </tr>
+</table>
+<table  id="prd" border="1">
+	
+</table>
+</div>
+
+	</main>
+	</div>
+	
+<script src=https://code.jquery.com/jquery-3.6.4.min.js> </script>
+<script>
+
+var products;
+function getProducts(){
+
+$.get("?tableName=products", function(productTable){
+	//console.log(productTable);
+	$("#prd").empty();
+	products = JSON.parse(productTable);
+	console.log(products);
+	// $("#prd").empty();
+
+	products.forEach(function(product){
+
+		$("#prd").append("<tr><td width=200px>" + product.prod_name + 
+		  "</td><td width=50px>" + product.prod_price + 
+		  "</td><td width=170px> <input type='number' id = "+ 
+			product.prod_id +"> </td></tr>");
+
+	 
+
+	}); // for each
+
+	$("#products").append("<div id='cost'></div>");
+
+  		});
+
+
+} // getProducts()
+
+function calculateCost(){
+	var sum = 0;
+	if (products){
+		$("#cost").empty();
+
+		products.forEach(function(product){
+			sum = sum + product.prod_price * $("#" + product.prod_id).val();
+
+		}); // for each
+		sum = sum * 1.1; // 10% tax
+		$("#cost").append("<div> Cost = $ " + sum.toFixed(2) + 
+			" incl. of 10% tax </div>");
+
+	}
+
+} //calculateCost()
+
+</script>
+
+
+</body>
+</html>
